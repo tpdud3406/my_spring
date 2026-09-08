@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>나의봄 - 공연 사진</title>
+<style>
+  :root {
+    --bg: #0f0f12;
+    --card: #1a1a1f;
+    --text: #f2f0eb;
+    --muted: #a8a49c;
+    --accent: #d8b4682f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  }
+  header {
+    padding: 48px 20px 28px;
+    text-align: center;
+  }
+  header h1 {
+    margin: 0 0 8px;
+    font-size: 1.6rem;
+    letter-spacing: 0.02em;
+  }
+  header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 12px 60px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  @media (min-width: 600px) {
+    .grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  }
+  .grid figure {
+    margin: 0;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--card);
+  }
+  .grid img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .grid img:active { transform: scale(0.97); }
+
+  .empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 60px 20px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  /* lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 6px;
+  }
+  .lightbox .close {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    color: #fff;
+    font-size: 2rem;
+    line-height: 1;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    padding: 20px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>나의봄</h1>
+  <p>공연을 함께해주셔서 감사합니다.<br>이곳에서 계속 사진이 업데이트됩니다.</p>
+</header>
+
+<main>
+  <div id="grid" class="grid"></div>
+  <p id="emptyMsg" class="empty" hidden>아직 등록된 사진이 없습니다. 곧 업데이트될 예정이에요!</p>
+</main>
+
+<footer>© 뮤토</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lightboxClose" aria-label="닫기">&times;</button>
+  <img id="lightboxImg" src="" alt="" />
+</div>
+
+<script>
+  // 사진을 추가하려면: images 폴더에 파일을 넣고, 아래 배열에 파일명만 추가하세요.
+  const photos = [
+    // "photo1.jpg",
+    // "photo2.jpg",
+  ];
+
+  const grid = document.getElementById("grid");
+  const emptyMsg = document.getElementById("emptyMsg");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightboxImg");
+
+  if (photos.length === 0) {
+    emptyMsg.hidden = false;
+  } else {
+    photos.forEach((filename) => {
+      const figure = document.createElement("figure");
+      const img = document.createElement("img");
+      img.src = "images/" + filename;
+      img.loading = "lazy";
+      img.alt = "나의봄 공연 사진";
+      img.addEventListener("click", () => {
+        lightboxImg.src = img.src;
+        lightbox.classList.add("open");
+      });
+      figure.appendChild(img);
+      grid.appendChild(figure);
+    });
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove("open");
+    lightboxImg.src = "";
+  }
+  document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+</script>
+
+</body>
+</html>
