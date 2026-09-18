@@ -1,0 +1,3 @@
+﻿# Private spreadsheet responses and Excel workbooks
+*.xlsx
+*.xls
